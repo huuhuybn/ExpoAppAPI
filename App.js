@@ -1,22 +1,27 @@
 import {StyleSheet, View, Text, FlatList, Button} from 'react-native';
 import {useState} from "react";
 
-const DATA = [3, 6, 67, 4, 2, 6, 7, 3, 57568, 3, 67, 7887, 3949, 43, 7, 324, 56, 76, 543,
-    5345, 7675, 76887, 3432, 3423, 65467, 786, 76, 76, 4, 2323, 56, 7, 3, 5, 6, 344, 57, 7]
+const DATA = [3, 4, 5, 6, 43, 3, 5, 6, 566, 54, 432, 534, 6, 43, 34, 534, 67, 78, 865
+    , 56, 4, 2, 5, 7, 3
+    , 74, 9, 4, 3, 3, 7, 8]
 
 const STUDENTS = [
-    {id: 1, name: 'Huy Nguyen1'},
-    {id: 2, name: 'Huy Nguyen2'},
-    {id: 3, name: 'Huy Nguyen3'},
-    {id: 4, name: 'Huy Nguyen4'},
-    {id: 5, name: 'Huy Nguyen5'},
-];
+    {id: 0, name: 'Huy Nguyen 1'},
+    {id: 1, name: 'Huy Nguyen 2'},
+    {id: 2, name: 'Huy Nguyen 3'},
+    {id: 3, name: 'Huy Nguyen 4'},
+    {id: 4, name: 'Huy Nguyen 5'},
+    {id: 5, name: 'Huy Nguyen 6'}
+]
+
 export default function App() {
 
     const [duLieu, setDuLieu] = useState(STUDENTS);
     const [selectedID, setSelectedID] = useState(null);
 
-    return (<View style={styles.container}>
+
+    return <View style={styles.container}>
+
         <Button title={'ADD'} onPress={() => {
             var id_ = Math.random();
             var name_ = "QQQ " + id_;
@@ -24,29 +29,35 @@ export default function App() {
             duLieu.push(student);
             setSelectedID(id_) // update vi tri theo ID cua item
         }}/>
-        <FlatList style={{flex: 1, width: '100%'}} data={duLieu}
-                  extraData={selectedID}
+
+        <FlatList extraData={selectedID} style={{flex: 1}} data={duLieu}
+                  keyExtractor={(item) => item.id}
                   renderItem={({item, index}) => {
-                      return <View style={{
-                          backgroundColor: 'black',
-                          padding: 8, margin: 8, borderRadius: 10
+
+                      const color_ = item.id === selectedID ? 'green' : 'white';
+
+                      return (<View style={{
+                          backgroundColor: 'black', margin: 8
+                          , borderRadius: 5
                       }}>
-                          <Text style={{color: 'yellow'}}>{item.id}</Text>
-                          <Text style={{color: 'yellow', marginBottom: 8}}>{item.name}</Text>
-                          <Button title={'Delete'} onPress={() => {
-                              var data = duLieu
-                              data.splice(index, 1)
-                              setDuLieu(data)
-                              setSelectedID(item.id)
-                          }}/>
-                          <View style={{height: 8}}/>
-                          <Button title={'Update'} onPress={() => {
+                          <Text style={{color: color_, padding: 8}}>
+                              {item.name} : {item.id}</Text>
+                          <Button title={'UPDATE'} onPress={() => {
                               item.name = "QQQQQ";
                               setSelectedID(item.id)
+                              // alert(duLieu.length + " : " + item.name)
                           }}/>
-                      </View>;
+                          <View style={{height: 8}}/>
+                          <Button title={'DELETE'} onPress={() => {
+                              var data = duLieu;
+                              data.splice(index, 1);
+                              setDuLieu(data)
+                              setSelectedID(item)
+                              //alert(duLieu.length + " : " + item.id)
+                          }}/>
+                      </View>)
                   }}/>
-    </View>);
+    </View>;
 }
 const styles = StyleSheet.create({
     container: {
