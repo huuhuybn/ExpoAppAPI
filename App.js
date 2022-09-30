@@ -16,19 +16,22 @@ const STUDENTS = [
 
 export default function App() {
 
-    const [duLieu, setDuLieu] = useState(STUDENTS);
+    const [duLieu, setDuLieu] = useState([]);
     const [selectedID, setSelectedID] = useState(null);
-
 
     return <View style={styles.container}>
 
-        <Button title={'ADD'} onPress={() => {
-            var id_ = Math.random();
-            var name_ = "QQQ " + id_;
-            var student = {id : id_,name: name_}
-            duLieu.push(student);
-            setSelectedID(id_) // update vi tri theo ID cua item
-        }}/>
+        <Button title={'LOAD DATA'} onPress={() => {
+            var requestOptions = {
+                method: 'GET',
+                redirect: 'follow'
+            };
+            fetch("https://jsonplaceholder.typicode.com/users", requestOptions)
+                .then(response => response.json())
+                .then(result => setDuLieu(result))
+                .catch(error => console.log('error', error));
+        }
+        }/>
 
         <FlatList extraData={selectedID} style={{flex: 1}} data={duLieu}
                   keyExtractor={(item) => item.id}
@@ -41,7 +44,9 @@ export default function App() {
                           , borderRadius: 5
                       }}>
                           <Text style={{color: color_, padding: 8}}>
-                              {item.name} : {item.id}</Text>
+                              {item.address.street} : {item.id}</Text>
+                          <Text style={{color: color_, padding: 8}}>
+                              {item.phone} : {item.id}</Text>
                           <Button title={'UPDATE'} onPress={() => {
                               item.name = "QQQQQ";
                               setSelectedID(item.id)
